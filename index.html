@@ -2,10 +2,127 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Emrah</title>
-    <p>EMRAH</p>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMRAH - Space Theme</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+        }
+
+        #space-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        .main-text {
+            font-size: 150px;
+            color: #fff;
+            text-shadow: 0 0 5px #fff;
+            position: relative;
+            z-index: 2;
+            font-family: 'Arial', sans-serif;
+            margin-bottom: 20px;
+        }
+
+        .sub-text {
+            font-size: 24px;
+            color: #fff;
+            text-shadow: 0 0 5px #fff;
+            position: relative;
+            z-index: 2;
+            font-family: 'Arial', sans-serif;
+            margin-top: 20px;
+        }
+
+        .text-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+    </style>
 </head>
 <body>
+    <div id="space-container"></div>
+    <div class="text-container">
+        <h1 class="main-text">EMRAH</h1>
+        <p class="sub-text">Work in progress...</p>
+    </div>
 
+    <script>
+        // Yıldızları oluştur
+        const spaceContainer = document.getElementById('space-container');
+        const starCount = 200;
+        const stars = [];
+
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 3;
+            
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.opacity = Math.random();
+            
+            spaceContainer.appendChild(star);
+            stars.push({
+                element: star,
+                x: parseFloat(star.style.left),
+                y: parseFloat(star.style.top),
+                speed: Math.random() * 0.5
+            });
+        }
+
+        // Mouse hareketine göre yıldızları hareket ettir
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+
+            stars.forEach(star => {
+                const moveX = (mouseX - 0.5) * star.speed;
+                const moveY = (mouseY - 0.5) * star.speed;
+
+                star.x += moveX;
+                star.y += moveY;
+
+                // Ekran sınırlarını kontrol et
+                if (star.x < 0) star.x = 100;
+                if (star.x > 100) star.x = 0;
+                if (star.y < 0) star.y = 100;
+                if (star.y > 100) star.y = 0;
+
+                star.element.style.left = star.x + '%';
+                star.element.style.top = star.y + '%';
+            });
+        });
+
+        // Her iki yazıyı da mouse'a göre hareket ettir
+        const textContainer = document.querySelector('.text-container');
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) / 50;
+            const moveY = (e.clientY - window.innerHeight / 2) / 50;
+            textContainer.style.transform = `translate(${moveX}px, ${moveY}px) scale(${1 + Math.abs(moveX) / 500})`;
+        });
+    </script>
 </body>
 </html>
