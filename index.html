@@ -50,11 +50,50 @@
             margin-top: 20px;
         }
 
+        /* Mobil cihazlar için yazı boyutu ayarı */
+        @media (max-width: 768px) {
+            .main-text {
+                font-size: 80px;
+            }
+            .sub-text {
+                font-size: 18px;
+            }
+        }
+
+        /* Daha küçük ekranlar için */
+        @media (max-width: 480px) {
+            .main-text {
+                font-size: 60px;
+            }
+            .sub-text {
+                font-size: 16px;
+            }
+        }
+
         .text-container {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(10px, 10px);
+            }
+            50% {
+                transform: translate(0, 20px);
+            }
+            75% {
+                transform: translate(-10px, 10px);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
         }
 
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
@@ -93,19 +132,17 @@
             });
         }
 
-        // Mouse hareketine göre yıldızları hareket ettir
-        document.addEventListener('mousemove', (e) => {
-            const mouseX = e.clientX / window.innerWidth;
-            const mouseY = e.clientY / window.innerHeight;
-
+        // Otomatik yıldız hareketi
+        function animateStars() {
+            const time = Date.now() * 0.001;
+            
             stars.forEach(star => {
-                const moveX = (mouseX - 0.5) * star.speed;
-                const moveY = (mouseY - 0.5) * star.speed;
+                const moveX = Math.sin(time) * star.speed;
+                const moveY = Math.cos(time) * star.speed;
 
                 star.x += moveX;
                 star.y += moveY;
 
-                // Ekran sınırlarını kontrol et
                 if (star.x < 0) star.x = 100;
                 if (star.x > 100) star.x = 0;
                 if (star.y < 0) star.y = 100;
@@ -114,15 +151,11 @@
                 star.element.style.left = star.x + '%';
                 star.element.style.top = star.y + '%';
             });
-        });
 
-        // Her iki yazıyı da mouse'a göre hareket ettir
-        const textContainer = document.querySelector('.text-container');
-        document.addEventListener('mousemove', (e) => {
-            const moveX = (e.clientX - window.innerWidth / 2) / 50;
-            const moveY = (e.clientY - window.innerHeight / 2) / 50;
-            textContainer.style.transform = `translate(${moveX}px, ${moveY}px) scale(${1 + Math.abs(moveX) / 500})`;
-        });
+            requestAnimationFrame(animateStars);
+        }
+
+        animateStars();
     </script>
 </body>
 </html>
